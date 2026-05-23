@@ -2,6 +2,7 @@ package com.gerardo.churchmanager.backend.news.controller;
 
 import com.gerardo.churchmanager.backend.news.dto.CreateNewsRequest;
 import com.gerardo.churchmanager.backend.news.dto.NewsResponse;
+import com.gerardo.churchmanager.backend.news.dto.UpdateNewsRequest;
 import com.gerardo.churchmanager.backend.news.service.NewsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,22 @@ public class NewsController {
 
         return newsService.getAll();
 
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public NewsResponse update(
+            @PathVariable Long id,
+            @RequestBody @Valid UpdateNewsRequest request
+    ) {
+        return newsService.update(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ADMIN')")
+    public void delete(@PathVariable Long id) {
+        newsService.delete(id);
     }
 
 }

@@ -2,6 +2,7 @@ package com.gerardo.churchmanager.backend.news.service;
 
 import com.gerardo.churchmanager.backend.news.dto.CreateNewsRequest;
 import com.gerardo.churchmanager.backend.news.dto.NewsResponse;
+import com.gerardo.churchmanager.backend.news.dto.UpdateNewsRequest;
 import com.gerardo.churchmanager.backend.news.entity.News;
 import com.gerardo.churchmanager.backend.news.repository.NewsRepository;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +54,28 @@ public class NewsService {
                 .createdAt(news.getCreatedAt())
                 .build();
 
+    }
+
+    public NewsResponse update(Long id, UpdateNewsRequest request) {
+
+        News news = newsRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("News not found"));
+
+        news.setTitle(request.getTitle());
+        news.setContent(request.getContent());
+
+        News updatedNews = newsRepository.save(news);
+
+        return mapToResponse(updatedNews);
+    }
+
+    public void delete(Long id) {
+
+        if (!newsRepository.existsById(id)) {
+            throw new RuntimeException("News not found");
+        }
+
+        newsRepository.deleteById(id);
     }
 
 }
