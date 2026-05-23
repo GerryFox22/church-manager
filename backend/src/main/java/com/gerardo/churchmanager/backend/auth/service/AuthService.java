@@ -1,5 +1,7 @@
 package com.gerardo.churchmanager.backend.auth.service;
 
+import com.gerardo.churchmanager.backend.auth.dto.AuthResponse;
+import com.gerardo.churchmanager.backend.auth.dto.LoginRequest;
 import com.gerardo.churchmanager.backend.auth.dto.RegisterRequest;
 import com.gerardo.churchmanager.backend.user.entity.User;
 import com.gerardo.churchmanager.backend.user.enums.Role;
@@ -16,6 +18,8 @@ public class AuthService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final JwtService jwtService;
 
     public void register(RegisterRequest request) {
 
@@ -55,4 +59,24 @@ public class AuthService {
 
     }
 
+    public AuthResponse login(LoginRequest request) {
+
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+
+        boolean passwordMatches = passwordEncoder.matches(
+                request.getPassword(),
+                user.getPassword()
+        );
+
+        if (!passwordMatches) {
+            throw new RuntimeException("Invalid email or password");
+        }
+
+        String token = jwtService.generateToken(user);
+
+        return AuthResponse.builder()
+                .token(token)
+                .build();
+    }
 }

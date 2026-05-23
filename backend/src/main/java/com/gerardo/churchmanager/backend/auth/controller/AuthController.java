@@ -1,5 +1,7 @@
 package com.gerardo.churchmanager.backend.auth.controller;
 
+import com.gerardo.churchmanager.backend.auth.dto.AuthResponse;
+import com.gerardo.churchmanager.backend.auth.dto.LoginRequest;
 import com.gerardo.churchmanager.backend.auth.dto.RegisterRequest;
 import com.gerardo.churchmanager.backend.auth.service.AuthService;
 import jakarta.validation.Valid;
@@ -18,5 +20,10 @@ public class AuthController {
     @ResponseStatus(HttpStatus.CREATED)
     public void register(@RequestBody @Valid RegisterRequest request) {
         authService.register(request);
+    }
+
+    @PostMapping("/login")
+    public AuthResponse login(@RequestBody @Valid LoginRequest request) {
+        return authService.login(request);
     }
 }
