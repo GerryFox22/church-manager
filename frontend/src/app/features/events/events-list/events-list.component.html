@@ -1,0 +1,39 @@
+<section class="events-list">
+  <header>
+    <h1>Events</h1>
+    <div class="actions">
+      <a routerLink="/dashboard">Dashboard</a>
+      @if (authService.isAdmin()) {
+        <a routerLink="/events/new">New event</a>
+      }
+    </div>
+  </header>
+
+  @if (isLoading()) {
+    <p>Loading…</p>
+  } @else if (errorMessage(); as error) {
+    <p class="error" role="alert">{{ error }}</p>
+  } @else if (items().length === 0) {
+    <p>No events yet.</p>
+  } @else {
+    <ul>
+      @for (item of items(); track item.id) {
+        <li>
+          <article>
+            <h2>{{ item.title }}</h2>
+            <p class="meta">
+              {{ item.eventDate | date: 'medium' }} · {{ item.location }}
+            </p>
+            <p>{{ item.description }}</p>
+            @if (authService.isAdmin()) {
+              <div class="item-actions">
+                <a [routerLink]="['/events', item.id, 'edit']">Edit</a>
+                <button type="button" (click)="deleteItem(item.id)">Delete</button>
+              </div>
+            }
+          </article>
+        </li>
+      }
+    </ul>
+  }
+</section>

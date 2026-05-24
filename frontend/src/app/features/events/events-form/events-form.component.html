@@ -1,0 +1,41 @@
+<section class="events-form">
+  <header>
+    <h1>{{ isEditMode() ? 'Edit event' : 'Create event' }}</h1>
+    <a routerLink="/events">Back to list</a>
+  </header>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <label>
+      Title
+      <input type="text" formControlName="title" />
+    </label>
+
+    <label>
+      Description
+      <textarea formControlName="description" rows="6"></textarea>
+    </label>
+
+    <label>
+      Date and time
+      <input type="datetime-local" formControlName="eventDate" />
+    </label>
+
+    <label>
+      Location
+      <input type="text" formControlName="location" />
+    </label>
+
+    <label>
+      Image
+      <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+    </label>
+
+    @if (errorMessage(); as error) {
+      <p class="error" role="alert">{{ error }}</p>
+    }
+
+    <button type="submit" [disabled]="isSubmitting()">
+      {{ isSubmitting() ? 'Saving…' : 'Save' }}
+    </button>
+  </form>
+</section>

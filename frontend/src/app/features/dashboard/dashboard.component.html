@@ -1,0 +1,17 @@
+<section class="dashboard">
+  <header>
+    <h1>Dashboard</h1>
+    <button type="button" (click)="authService.logout()">Sign out</button>
+  </header>
+
+  <p>Welcome to Church Manager.</p>
+
+  <nav>
+    <a routerLink="/news">News</a>
+    <a routerLink="/events">Events</a>
+    @if (authService.isAdmin()) {
+      <a routerLink="/news/new">Create news</a>
+      <a routerLink="/events/new">Create event</a>
+    }
+  </nav>
+</section>

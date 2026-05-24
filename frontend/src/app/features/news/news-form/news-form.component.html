@@ -1,0 +1,31 @@
+<section class="news-form">
+  <header>
+    <h1>{{ isEditMode() ? 'Edit news' : 'Create news' }}</h1>
+    <a routerLink="/news">Back to list</a>
+  </header>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <label>
+      Title
+      <input type="text" formControlName="title" />
+    </label>
+
+    <label>
+      Content
+      <textarea formControlName="content" rows="8"></textarea>
+    </label>
+
+    <label>
+      Image
+      <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+    </label>
+
+    @if (errorMessage(); as error) {
+      <p class="error" role="alert">{{ error }}</p>
+    }
+
+    <button type="submit" [disabled]="isSubmitting()">
+      {{ isSubmitting() ? 'Saving…' : 'Save' }}
+    </button>
+  </form>
+</section>

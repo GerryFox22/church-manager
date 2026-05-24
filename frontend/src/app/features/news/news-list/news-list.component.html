@@ -1,0 +1,37 @@
+<section class="news-list">
+  <header>
+    <h1>News</h1>
+    <div class="actions">
+      <a routerLink="/dashboard">Dashboard</a>
+      @if (authService.isAdmin()) {
+        <a routerLink="/news/new">New article</a>
+      }
+    </div>
+  </header>
+
+  @if (isLoading()) {
+    <p>Loading…</p>
+  } @else if (errorMessage(); as error) {
+    <p class="error" role="alert">{{ error }}</p>
+  } @else if (items().length === 0) {
+    <p>No news yet.</p>
+  } @else {
+    <ul>
+      @for (item of items(); track item.id) {
+        <li>
+          <article>
+            <h2>{{ item.title }}</h2>
+            <p class="meta">{{ item.createdAt | date: 'medium' }}</p>
+            <p>{{ item.content }}</p>
+            @if (authService.isAdmin()) {
+              <div class="item-actions">
+                <a [routerLink]="['/news', item.id, 'edit']">Edit</a>
+                <button type="button" (click)="deleteItem(item.id)">Delete</button>
+              </div>
+            }
+          </article>
+        </li>
+      }
+    </ul>
+  }
+</section>
