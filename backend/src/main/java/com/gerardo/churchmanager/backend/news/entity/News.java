@@ -26,4 +26,7 @@ public class News {
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
+
+    @Column
+    private String imageUrl;
 }
