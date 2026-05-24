@@ -30,13 +30,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
                         .requestMatchers("/uploads/**").permitAll()
-                        // lettura pubblica news
-                        .requestMatchers(HttpMethod.GET, "/api/news", "/api/news/**").permitAll()
 
-                        // gestione news solo ADMIN
+                        .requestMatchers(HttpMethod.GET, "/api/news", "/api/news/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/news").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/news/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/news/**").hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/api/events", "/api/events/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/events").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/events/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/events/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
                 )
