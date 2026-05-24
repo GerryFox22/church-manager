@@ -1,5 +1,6 @@
 package com.gerardo.churchmanager.backend.news.service;
 
+import com.gerardo.churchmanager.backend.common.exception.ResourceNotFoundException;
 import com.gerardo.churchmanager.backend.news.dto.CreateNewsRequest;
 import com.gerardo.churchmanager.backend.news.dto.NewsResponse;
 import com.gerardo.churchmanager.backend.news.dto.UpdateNewsRequest;
@@ -63,7 +64,7 @@ public class NewsService {
 
     public NewsResponse update(Long id, UpdateNewsRequest request, MultipartFile image) {
         News news = newsRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("News not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("News not found"));
 
         news.setTitle(request.getTitle());
         news.setContent(request.getContent());
@@ -79,11 +80,12 @@ public class NewsService {
 
     public void delete(Long id) {
 
-        if (!newsRepository.existsById(id)) {
-            throw new RuntimeException("News not found");
-        }
+        News news = newsRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("News not found")
+                );
 
-        newsRepository.deleteById(id);
+        newsRepository.delete(news);
     }
 
     private String saveImage(MultipartFile image) {
